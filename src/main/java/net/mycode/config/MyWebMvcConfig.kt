@@ -9,8 +9,6 @@ import java.nio.charset.Charset
 import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.json.GsonHttpMessageConverter
-import org.springframework.scheduling.annotation.EnableAsync
-import org.springframework.scheduling.annotation.EnableScheduling
 
 
 /**
@@ -39,5 +37,4 @@ open class MyWebMvcConfig : WebMvcConfigurerAdapter() {
         gsonHttpMessageConverter.gson = gson
         converters!!.add(gsonHttpMessageConverter)
     }
-
 }

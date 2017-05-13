@@ -1,17 +1,16 @@
-package net.mycode.dao
+package net.mycode.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.StringRedisTemplate
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
 /**
  * Created by YanCheng on 2017/5/11.
  */
+//新增spring-data-redis，已经配置好并可以测试启用，不要放在dao层用@Repository 注解，不会生效， 应该放在sevice层
 @Service
-open class RedisRepository {
+open class RedisService {
 
 
     @Autowired
@@ -39,7 +38,7 @@ open class RedisRepository {
     }
 
     fun setExpire(key: String, time: Long): Boolean {
-        return stringRedisTemplate.expire("red_123", time, TimeUnit.MILLISECONDS)//设置过期时间
+        return stringRedisTemplate.expire(key, time, TimeUnit.MILLISECONDS)//设置过期时间
     }
 
     fun haskeyFromList(key: String, element: String): Boolean {
@@ -47,7 +46,7 @@ open class RedisRepository {
     }
 
     fun getList(key: String, element: String): Set<String> {
-        return stringRedisTemplate.opsForSet().members("red_123")//根据key获取set集合
+        return stringRedisTemplate.opsForSet().members(key)//根据key获取set集合
     }
 
 

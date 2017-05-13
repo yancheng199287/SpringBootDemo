@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.support.SpringBootServletInitializer
+import org.springframework.context.annotation.ComponentScan
 
 /**
  * Created by MAC on 2017/5/7.
  */
 @SpringBootApplication
+@ComponentScan("net.mycode")
 open class Application : SpringBootServletInitializer() {
 
     override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {

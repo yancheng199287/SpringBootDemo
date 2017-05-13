@@ -17,7 +17,7 @@ data class User(
         @Column(name = "name", nullable = false, length = 30) var name: String?,
         var age: Int,
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date?) : Serializable {
-    public constructor() : this(id = null, name = null, age = 0, addTime = null)
+    constructor() : this(id = null, name = null, age = 0, addTime = null)
 }
 
 
@@ -28,5 +28,5 @@ data class Student(
         @Column(name = "name", nullable = false, length = 30) var name: String?,
         var age: Int,
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date?) : Serializable {
-    protected constructor() : this(id = null, name = null, age = 0, addTime = null)
+    constructor() : this(id = null, name = null, age = 0, addTime = null)
 }

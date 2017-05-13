@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.ResponseBody
 import java.sql.Timestamp
 import java.util.*
 import net.mycode.component.AsyncTask
+import net.mycode.component.shiro.MyAuthorizationFilter
+import net.mycode.component.shiro.MyRealm
+import net.mycode.component.shiro.RedisSessionDao
+import net.mycode.service.RedisService
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.scheduling.annotation.Async
-import org.springframework.scheduling.annotation.AsyncResult
 import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.Future
 import org.springframework.web.bind.annotation.PathVariable
-
-
 
 
 /**
@@ -34,6 +36,22 @@ class UserController {
 
     @Autowired
     lateinit var asynctask: AsyncTask
+
+    @Autowired
+    lateinit var redisService: RedisService
+
+
+
+    @Autowired
+    lateinit var myAuthorizationFilter: MyAuthorizationFilter
+
+    @Autowired
+    lateinit var myRealm: MyRealm
+
+    @Autowired
+    lateinit var redisSessionDao: RedisSessionDao
+
+
 
 
     @RequestMapping("/index")
@@ -117,12 +135,18 @@ class UserController {
     @ResponseBody
     operator fun get(@PathVariable("userId") userId: Int): User {
         logger.info("获取用户userId=" + userId)
-        var user=userService.get(userId)
+        var user = userService.get(userId)
         return user
     }
 
-
-
+    @RequestMapping(value = "/testredis", method = arrayOf(RequestMethod.GET))
+    @ResponseBody
+    fun addValue(): String {
+        redisService.setKeyValue("test", "5201314")
+        logger.info("获取key  :test=====" + redisService.getValue("test"))
+        var log=" myAuthorizationFilter:${myAuthorizationFilter} myRealm:${myRealm} redisSessionDao:${redisSessionDao}"
+        return "ok===>${log}"
+    }
 
 
 }
