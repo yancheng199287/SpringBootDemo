@@ -1,6 +1,7 @@
 package net.mycode.config
 
 import com.google.gson.GsonBuilder
+import net.mycode.component.JsonMethodArgumentResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.EnableWebMvc

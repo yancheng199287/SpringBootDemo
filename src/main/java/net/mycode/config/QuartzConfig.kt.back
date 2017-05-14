@@ -1,0 +1,89 @@
+package net.mycode.config
+
+import net.mycode.component.ExampleBusinessObject
+import net.mycode.component.ExampleJob
+import org.quartz.Trigger
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.quartz.*
+
+
+/**
+ * Created by MAC on 2017/5/12.
+ */
+
+@Configuration
+open class QuartzConfig {
+
+
+    @Autowired
+    lateinit var exampleBusinessObject:ExampleBusinessObject
+
+
+    /**  第一种方法
+     *  ExampleJob 必须实现
+     * */
+    @Bean
+    open fun jobDetailFactoryBean(): JobDetailFactoryBean {
+        val jobDetailFactoryBean = JobDetailFactoryBean()
+        jobDetailFactoryBean.setJobClass(ExampleJob::class.java)
+        jobDetailFactoryBean.setName("name")
+        jobDetailFactoryBean.setGroup("group")
+        jobDetailFactoryBean.setDurability(true)
+        //通过ack key 获取 applicationContext对象 对spring bean操作
+        jobDetailFactoryBean.setApplicationContextJobDataKey("ack")
+        return jobDetailFactoryBean
+    }
+
+
+    /**
+     *  把一个job分配到一个方法，执行某个对象的方法
+     * */
+    @Bean
+    open fun methodInvokingJobDetailFactoryBean(): MethodInvokingJobDetailFactoryBean {
+        var m = MethodInvokingJobDetailFactoryBean()
+        //默多线程执行，可以指定false 不允许多线程执行
+        m.setConcurrent(false)
+        m.targetObject = exampleBusinessObject
+        m.targetMethod = "doIt"
+        return m
+    }
+
+    @Bean
+    open fun simpleTriggerFactoryBean(): SimpleTriggerFactoryBean {
+        var s = SimpleTriggerFactoryBean()
+        s.setJobDetail(jobDetailFactoryBean().`object`)
+        //启动延时一秒
+        s.setStartDelay(10000)
+        //间隔3秒执行
+        s.setRepeatInterval(30000)
+        return s
+    }
+
+
+    @Bean
+    open fun cronTriggerFactoryBean(): CronTriggerFactoryBean {
+        var c = CronTriggerFactoryBean()
+
+        c.setJobDetail(methodInvokingJobDetailFactoryBean().`object`)
+        //cron时间表达式
+        // 每三秒执行一次
+        var e="0/4 * * * * ? *"
+        c.setCronExpression(e)
+        return c
+    }
+
+
+    @Bean
+    open fun schedulerFactoryBean(): SchedulerFactoryBean {
+        var s = SchedulerFactoryBean()
+
+        //object 是kotlin关键字，这里只是用属性的方式访问getObject方法，要用单引号转义
+        s.setTriggers(simpleTriggerFactoryBean().`object`, cronTriggerFactoryBean().`object`)
+        return s
+    }
+
+
+}

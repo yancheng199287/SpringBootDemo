@@ -15,11 +15,13 @@ import net.mycode.component.shiro.MyAuthorizationFilter
 import net.mycode.component.shiro.MyRealm
 import net.mycode.component.shiro.RedisSessionDao
 import net.mycode.service.RedisService
+import org.apache.shiro.web.servlet.SimpleCookie
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.Future
 import org.springframework.web.bind.annotation.PathVariable
+import javax.annotation.Resource
 
 
 /**
@@ -50,6 +52,9 @@ class UserController {
 
     @Autowired
     lateinit var redisSessionDao: RedisSessionDao
+
+    @Resource(name="rememberMeCookie")
+    lateinit var simpleCookie :SimpleCookie
 
 
 
@@ -114,6 +119,7 @@ class UserController {
         for (i in 0..2) {
             //如果直接调用，不需要返回值，当前线程不会等待异步线程的结果
             asynctask.doTask1()
+            asynctask.doTask2()
             //如果需要异步处理方法的返回结果   当前线程会阻塞等待异步线程的结果
             //  var result: Future<String> = asynctask.doTask1()
             //var s = "isDone:" + result.isDone + ",  isCancelled: " + result.isCancelled + ",  get()" + result.get()
@@ -142,10 +148,11 @@ class UserController {
     @RequestMapping(value = "/testredis", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun addValue(): String {
+        var sss=simpleCookie.maxAge
         redisService.setKeyValue("test", "5201314")
         logger.info("获取key  :test=====" + redisService.getValue("test"))
         var log=" myAuthorizationFilter:${myAuthorizationFilter} myRealm:${myRealm} redisSessionDao:${redisSessionDao}"
-        return "ok===>${log}"
+        return "ok==maxAge:${sss}========${log}"
     }
 
 

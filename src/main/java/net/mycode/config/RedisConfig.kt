@@ -44,7 +44,7 @@ open class RedisConfig {
 
     @Bean
     @ConditionalOnMissingBean //判断是否执行初始化代码，即如果用户未创建则执行创建bean，如果已经创建了bean，则相关的初始化代码不再执行
-    open fun getJedisConnectionFactory(): JedisConnectionFactory {
+    open fun jedisConnectionFactory(): JedisConnectionFactory {
         var pool = JedisPoolConfig()
         pool.maxTotal = maxTotal
         pool.maxIdle = maxIdle
@@ -68,11 +68,11 @@ open class RedisConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    open fun getRedisTemplate(): StringRedisTemplate {
+    open fun redisTemplate(): StringRedisTemplate {
         //使用字符串模版，内置还有其他的，也可以通过RedisTemplate定制
         var template = StringRedisTemplate()
         //当@Bean对彼此的依赖，表达这种依赖很简单，只要有一个Bean的方法调用另一个如下
-        template.connectionFactory = getJedisConnectionFactory()
+        template.connectionFactory = jedisConnectionFactory()
         return template
     }
 
