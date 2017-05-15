@@ -15,7 +15,12 @@ import net.mycode.component.shiro.MyAuthorizationFilter
 import net.mycode.component.shiro.MyRealm
 import net.mycode.component.shiro.RedisSessionDao
 import net.mycode.service.RedisService
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.apache.shiro.web.servlet.SimpleCookie
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.RequestMethod
@@ -29,7 +34,20 @@ import javax.annotation.Resource
  */
 
 @Controller
+/***
+ *   @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+ *   spring中默认所有的bean都是单例  通过 @Scope注解可以指定多例或者单例
+ *
+ *   如果一个bean是单例， 那么这个bean中的成员变量只会初始化一次， 它将会被缓存起来
+ *
+ *   在控制层中，如果是单例模式bean，定义了成员变量，如下面的 temp变量，在多个action中互相调用 会有线程安全问题，产生脏数据
+ *
+ *   建议是 如果你的Controller 不存在成员变量被共享使用的情况  可默认为单例模式，性能会更好
+ *   否则定义为多例
+ * */
 class UserController {
+
+    private var temp : Int=10
 
     private val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
 
@@ -42,7 +60,8 @@ class UserController {
     @Autowired
     lateinit var redisService: RedisService
 
-
+    @Autowired
+    lateinit var okHttpClient: OkHttpClient
 
     @Autowired
     lateinit var myAuthorizationFilter: MyAuthorizationFilter
@@ -53,10 +72,8 @@ class UserController {
     @Autowired
     lateinit var redisSessionDao: RedisSessionDao
 
-    @Resource(name="rememberMeCookie")
-    lateinit var simpleCookie :SimpleCookie
-
-
+    @Resource(name = "rememberMeCookie")
+    lateinit var simpleCookie: SimpleCookie
 
 
     @RequestMapping("/index")
@@ -148,11 +165,25 @@ class UserController {
     @RequestMapping(value = "/testredis", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun addValue(): String {
-        var sss=simpleCookie.maxAge
+        var sss = simpleCookie.maxAge
         redisService.setKeyValue("test", "5201314")
         logger.info("获取key  :test=====" + redisService.getValue("test"))
-        var log=" myAuthorizationFilter:${myAuthorizationFilter} myRealm:${myRealm} redisSessionDao:${redisSessionDao}"
+        var log = " myAuthorizationFilter:${myAuthorizationFilter} myRealm:${myRealm} redisSessionDao:${redisSessionDao}"
         return "ok==maxAge:${sss}========${log}"
+    }
+
+
+    @RequestMapping(value = "/testrequest", method = arrayOf(RequestMethod.GET))
+    @ResponseBody
+    fun doRequest(): String {
+        var data : Int=23
+        data+=15
+        temp += 12
+        var request: Request = Request.Builder().url("http://baike.baidu.com/api/openapi/BaikeLemmaCardApi?scope=103&format=json&appid=379020&bk_key=关键字&bk_length=600").build()
+        var response: Response = okHttpClient.newCall(request).execute()
+        var result = response.body()!!.string()
+        println("${okHttpClient.hashCode()}   result: temp: $temp   data: $data =======>:" + result)
+        return result
     }
 
 
