@@ -1,0 +1,41 @@
+<config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <service>
+        <jsr107:defaults>
+            <!--使用别名“people”定义缓存，该缓存来源于缓存模板“heap-cache”-->
+            <jsr107:cache name="people" template="heap-cache"/>
+        </jsr107:defaults>
+    </service>
+
+    <cache-template name="heap-cache">
+          <!-- 此部分允许您添加缓存事件侦听器。我为5个事件添加了一个监听器。EventLogger类将发生每个事件。-->
+        <listeners>
+            <listener>
+                <class>net.mycode.component.EhcacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+
+               <!-- 定义一个CREATED事件，当一个条目被添加到缓存，此侦听器将会得到。-->
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <!-- 更新事件-->
+                <events-to-fire-on>UPDATED</events-to-fire-on>
+                <!--过期事件-->
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <!--移除事件-->
+                <events-to-fire-on>REMOVED</events-to-fire-on>
+                <!--逐出事件-->
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners>
+        <resources>
+            <!--该堆配置为允许2000个条目-->
+            <heap unit="entries">2000</heap>
+            <!--配置200MB空间-->
+            <offheap unit="MB">100</offheap>
+        </resources>
+    </cache-template>
+</config>

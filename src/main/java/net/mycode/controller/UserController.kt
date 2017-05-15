@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod
 import java.util.concurrent.Future
 import org.springframework.web.bind.annotation.PathVariable
 import javax.annotation.Resource
+import javax.cache.annotation.CachePut
+import javax.cache.annotation.CacheResult
+import javax.cache.annotation.CacheValue
 
 
 /**
@@ -45,9 +48,9 @@ import javax.annotation.Resource
  *   建议是 如果你的Controller 不存在成员变量被共享使用的情况  可默认为单例模式，性能会更好
  *   否则定义为多例
  * */
-class UserController {
+open class UserController {
 
-    private var temp : Int=10
+    private var temp: Int = 10
 
     private val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
 
@@ -176,14 +179,30 @@ class UserController {
     @RequestMapping(value = "/testrequest", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun doRequest(): String {
-        var data : Int=23
-        data+=15
+        var data: Int = 23
+        data += 15
         temp += 12
         var request: Request = Request.Builder().url("http://baike.baidu.com/api/openapi/BaikeLemmaCardApi?scope=103&format=json&appid=379020&bk_key=关键字&bk_length=600").build()
         var response: Response = okHttpClient.newCall(request).execute()
         var result = response.body()!!.string()
         println("${okHttpClient.hashCode()}   result: temp: $temp   data: $data =======>:" + result)
         return result
+    }
+
+
+    @RequestMapping(value = "/testcache", method = arrayOf(RequestMethod.GET))
+    @ResponseBody
+    fun doRequest01(): String {
+        var u: User = getMyUser(10)
+        println("测试echcache 缓存。。。。。")
+        return u.toString()
+    }
+
+  //相关注解配置  https://spring.io/blog/2014/04/14/cache-abstraction-jcache-jsr-107-annotations-support
+    //@CacheResult(cacheName = "person")
+    @CachePut(cacheName = "people")
+    open fun getMyUser(@CacheValue a: Int): User {
+        return User(100, "张华", 33, Date())
     }
 
 

@@ -95,11 +95,11 @@
         </dependency>
 
 
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-redis</artifactId>
-                <version>1.8.3.RELEASE</version>
-            </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.8.3.RELEASE</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
         <dependency>
@@ -164,6 +164,23 @@
             <version>3.8.0</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
+        <!-- 包含所有JSR-107注解 JSR-107注释仅适用于Spring 4.1+ -->
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
 
     </dependencies>
     <!-- Package as an executable jar -->

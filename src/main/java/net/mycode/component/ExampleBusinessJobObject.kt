@@ -37,19 +37,19 @@ open class ExampleBusinessObject {
      *
      *  我们直接在 @Scheduled注解的方法里调用普通方法 执行代码块 就是异步的 用的线程是ThreadPoolTaskScheduler线程池的
      */
-    @Scheduled(cron = "*/1 * * * * ?")
-    fun doTimerTask001() {
-        var t=Thread.currentThread().name
-        println("$t 开始执行ExampleBusinessObject对象中的 doTimerTask001 ()方法。。。。。。。 ")
+    //@Scheduled(cron = "*/1 * * * * ?")
+    /* fun doTimerTask001() {
+         var t=Thread.currentThread().name
+         println("$t 开始执行ExampleBusinessObject对象中的 doTimerTask001 ()方法。。。。。。。 ")
 
-        doasynctak()
-    }
+        // doasynctak()
+     }
 
 
-    @Async
-    open fun doasynctak(){
-        var t=Thread.currentThread().name
-        println("$t 开始执行ExampleBusinessObject对象中的 doasynctak ()方法。。。。。。。 ")
-    }
+     @Async
+     open fun doasynctak(){
+         var t=Thread.currentThread().name
+         println("$t 开始执行ExampleBusinessObject对象中的 doasynctak ()方法。。。。。。。 ")
+     }*/
 
 }
