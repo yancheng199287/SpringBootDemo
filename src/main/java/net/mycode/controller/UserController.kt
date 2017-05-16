@@ -198,10 +198,10 @@ open class UserController {
         return u.toString()
     }
 
-  //相关注解配置  https://spring.io/blog/2014/04/14/cache-abstraction-jcache-jsr-107-annotations-support
-    //@CacheResult(cacheName = "person")
-    @CachePut(cacheName = "people")
-    open fun getMyUser(@CacheValue a: Int): User {
+    //相关注解配置  https://spring.io/blog/2014/04/14/cache-abstraction-jcache-jsr-107-annotations-support
+    @CacheResult(cacheName = "people")
+    open fun getMyUser(a: Int): User {
+        println("aaaaaaaaaaaaaa")
         return User(100, "张华", 33, Date())
     }
 
