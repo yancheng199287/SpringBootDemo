@@ -17,7 +17,7 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter
  * SpringMVC之前xml配置文件  可以实在在这里全部配置！
  */
 
-@EnableWebMvc
+
 @Configuration
 open class MyWebMvcConfig : WebMvcConfigurerAdapter() {
 

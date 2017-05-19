@@ -12,7 +12,6 @@ import java.util.concurrent.ThreadPoolExecutor
  * Created by YanCheng on 2017/5/9.
  */
 @Configuration
-@EnableAsync  //表示 xml中的 <task>  告诉spring我要开启自定义异步线程， 如果不开启，默认会有一个简单的异步线程池
 open class MyAsyncTaskExecutor {
 
     /** Set the ThreadPoolExecutor's core pool size.  */

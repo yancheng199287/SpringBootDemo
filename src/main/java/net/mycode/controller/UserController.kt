@@ -14,12 +14,14 @@ import net.mycode.component.AsyncTask
 import net.mycode.component.shiro.MyAuthorizationFilter
 import net.mycode.component.shiro.MyRealm
 import net.mycode.component.shiro.RedisSessionDao
+import net.mycode.service.EhcacheService
 import net.mycode.service.RedisService
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.apache.shiro.web.servlet.SimpleCookie
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.cache.jcache.JCacheCacheManager
 import org.springframework.context.annotation.Scope
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory
 import org.springframework.scheduling.annotation.Async
@@ -30,6 +32,7 @@ import javax.annotation.Resource
 import javax.cache.annotation.CachePut
 import javax.cache.annotation.CacheResult
 import javax.cache.annotation.CacheValue
+import javax.persistence.Cacheable
 
 
 /**
@@ -53,6 +56,13 @@ open class UserController {
     private var temp: Int = 10
 
     private val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
+
+
+    @Autowired
+    lateinit var ehcacheService: EhcacheService
+
+    // @Autowired
+    // var jCacheCacheManager: JCacheCacheManager
 
     @Autowired
     lateinit var userService: UserService
@@ -193,17 +203,36 @@ open class UserController {
     @RequestMapping(value = "/testcache", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun doRequest01(): String {
-        var u: User = getMyUser(10)
-        println("测试echcache 缓存。。。。。")
-        return u.toString()
+// u: User = getMyUser(10)
+        println("测试echcache 缓存。。。。")
+        return ehcacheService.saveUser("孙尚香").toString()
     }
 
+    @RequestMapping(value = "/testcache001", method = arrayOf(RequestMethod.GET))
+    @ResponseBody
+    fun doRequest02(): String {
+// u: User = getMyUser(10)
+        println("测试echcache 缓存。。。。")
+        return ehcacheService.saveUser001("周瑜").toString()
+    }
+
+
     //相关注解配置  https://spring.io/blog/2014/04/14/cache-abstraction-jcache-jsr-107-annotations-support
-    @CacheResult(cacheName = "people")
+    //@CacheResult(cacheName = "people")
+    // @CachePut(cacheName = "people"
+    // @Cacheable     // 使用了一个缓存名叫 accountCache
+    /*@CacheResult(cacheName = "people")
     open fun getMyUser(a: Int): User {
         println("aaaaaaaaaaaaaa")
-        return User(100, "张华", 33, Date())
-    }
+
+
+        var cache = jCacheCacheManager.getCache("mycache")
+        cache.putIfAbsent("user", "we are family!")
+
+
+
+        return User(100, "张华 ${cache.get("user").get()}", 33, Date())
+    }*/
 
 
 }
