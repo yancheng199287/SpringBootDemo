@@ -6,11 +6,9 @@ package net.mycode.entity
  *   data  的 calss 名字 不要跟文件名一样，不然不好导包！！！
  *
  */
-import sun.security.x509.AccessDescription
 import java.io.Serializable
 import java.util.Date
 import javax.persistence.*
-import java.util.HashSet
 
 
 @Entity
@@ -44,8 +42,9 @@ data class Account(
         @Column(nullable = true, length = 18) var password: String?,
         @Temporal(TemporalType.TIMESTAMP) var birthday: Date?,
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date?
-        // @OneToMany(mappedBy="order",cascade = CascadeType.ALL, fetch = FetchType.LAZY) @OrderBy(value = "id ASC") books: Set<Book>
-        //。mappBy表示关系被维护端，只有关系端有权去更新外键。这里还有注意OneToMany默认的加载方式是赖加载。当看到设置关系中最后一个单词是Many，那么该加载默认为懒加载
+        //一对多和多对一双向关联，取数据导致死循环，如果使用jackjson可使用@JsonIgnore，
+       // @Transient @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY) @OrderBy(value = "id ASC") var books: List<Book>?
+        //。mappBy表示关系被维护端也就是外键指向的是那个表，在这里，book的外键指向这里，只有关系端有权去更新外键。这里还有注意OneToMany默认的加载方式是赖加载。当看到设置关系中最后一个单词是Many，那么该加载默认为懒加载
         //  @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY) @OrderBy(value = "id DESC") var books: Set<Book>?
 ) : Serializable {
     constructor() : this(id = null, name = null, password = null, birthday = null, addTime = null)
@@ -60,5 +59,5 @@ data class Book(
         var description: String? = null,
         @Column(nullable = false, length = 10) var author: String? = null,
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date? = null,
-        @ManyToOne @JoinColumn(name = "account_id") var account: Account? = null
+        @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "account_id") var account: Account? = null
 ) : Serializable

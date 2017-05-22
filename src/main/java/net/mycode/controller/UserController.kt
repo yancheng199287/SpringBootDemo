@@ -21,6 +21,8 @@ import okhttp3.Request
 import okhttp3.Response
 import org.apache.shiro.web.servlet.SimpleCookie
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.cache.jcache.JCacheCacheManager
 import org.springframework.context.annotation.Scope
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory

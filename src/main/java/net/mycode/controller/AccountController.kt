@@ -38,15 +38,20 @@ open class AccountController {
     }
 
     @RequestMapping(value = "/book/{accountId}")
-    fun account(@PathVariable("accountId") accountId: Int): String {
+    fun account(@PathVariable("accountId") accountId: Int): Account {
         /*var account = Account(null, "wuzihe", "520code.net", Date(), Date(),null)
         accountService.save(account)
         var book = Book(null, "三国演义", "四大名著之一", "罗贯中", Date(), account)
         bookService.save(book)*/
 
-        var account=accountService.get(accountId)
-        var book=bookService.get(accountId)
-        return "查询某个账户下的所有书籍,$account \n\n $book"
+        var account = accountService.get(accountId)
+
+
+
+        //  println("$$account")
+        //  var book=bookService.get(accountId)
+           return account
+        //return "查询某个账户下的所有书籍, \n\n  "
     }
 
 }
