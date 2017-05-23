@@ -205,7 +205,6 @@ open class UserController {
     @RequestMapping(value = "/testcache", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun doRequest01(): String {
-// u: User = getMyUser(10)
         println("测试echcache 缓存。。。。")
         return ehcacheService.saveUser("孙尚香").toString()
     }
@@ -213,28 +212,8 @@ open class UserController {
     @RequestMapping(value = "/testcache001", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun doRequest02(): String {
-// u: User = getMyUser(10)
         println("测试echcache 缓存。。。。")
         return ehcacheService.saveUser001("周瑜").toString()
     }
-
-
-    //相关注解配置  https://spring.io/blog/2014/04/14/cache-abstraction-jcache-jsr-107-annotations-support
-    //@CacheResult(cacheName = "people")
-    // @CachePut(cacheName = "people"
-    // @Cacheable     // 使用了一个缓存名叫 accountCache
-    /*@CacheResult(cacheName = "people")
-    open fun getMyUser(a: Int): User {
-        println("aaaaaaaaaaaaaa")
-
-
-        var cache = jCacheCacheManager.getCache("mycache")
-        cache.putIfAbsent("user", "we are family!")
-
-
-
-        return User(100, "张华 ${cache.get("user").get()}", 33, Date())
-    }*/
-
 
 }

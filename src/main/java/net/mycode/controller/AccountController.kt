@@ -1,6 +1,7 @@
 package net.mycode.controller
 
 import net.mycode.entity.Account
+import net.mycode.entity.AccountType
 import net.mycode.entity.Book
 import net.mycode.service.AccountService
 import net.mycode.service.BookService
@@ -30,7 +31,8 @@ open class AccountController {
 
     @RequestMapping("/index")
     fun index(): String {
-        var account = Account(null, "wuzihe", "520code.net", Date(), Date())
+
+        var account = Account(null, "wuzihe", "520code.net",AccountType.user, Date(), Date())
         accountService.save(account)
         var book = Book(null, "三国演义", "四大名著之一", "罗贯中", Date(), account)
         bookService.save(book)

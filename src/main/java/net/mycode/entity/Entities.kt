@@ -40,14 +40,15 @@ data class Account(
         @Id @GeneratedValue var id: Int? = 0,
         @Column(nullable = true, length = 30) var name: String?,
         @Column(nullable = true, length = 18) var password: String?,
+        @Column(nullable = false) var accountType: AccountType?,
         @Temporal(TemporalType.TIMESTAMP) var birthday: Date?,
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date?
         //一对多和多对一双向关联，取数据导致死循环，如果使用jackjson可使用@JsonIgnore，
-       // @Transient @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY) @OrderBy(value = "id ASC") var books: List<Book>?
+        // @Transient @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY) @OrderBy(value = "id ASC") var books: List<Book>?
         //。mappBy表示关系被维护端也就是外键指向的是那个表，在这里，book的外键指向这里，只有关系端有权去更新外键。这里还有注意OneToMany默认的加载方式是赖加载。当看到设置关系中最后一个单词是Many，那么该加载默认为懒加载
         //  @OneToMany(mappedBy = "account", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.LAZY) @OrderBy(value = "id DESC") var books: Set<Book>?
 ) : Serializable {
-    constructor() : this(id = null, name = null, password = null, birthday = null, addTime = null)
+    constructor() : this(id = null, name = null, accountType = null, password = null, birthday = null, addTime = null)
 }
 
 
@@ -61,3 +62,19 @@ data class Book(
         @Temporal(TemporalType.TIMESTAMP) var addTime: Date? = null,
         @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "account_id") var account: Account? = null
 ) : Serializable
+
+
+enum class AccountType {
+    admin("管理员"),
+    agent("代理商"),
+    vip("vip用户"),
+    user("p普通用户");
+
+    private var roleName: String
+
+    constructor(roleName: String) {
+        this.roleName = roleName
+    }
+
+
+}
