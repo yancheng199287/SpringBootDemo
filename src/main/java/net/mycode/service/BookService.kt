@@ -22,4 +22,8 @@ open class BookService {
     fun get(id: Int): Book {
         return bookRepository.getOne(id)
     }
+
+    fun getName(id: Int): String {
+        return bookRepository.getName(id)
+    }
 }

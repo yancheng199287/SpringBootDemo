@@ -1,7 +1,6 @@
 package net.mycode.dao
 
 import net.mycode.entity.Account
-import net.mycode.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.transaction.annotation.Transactional
 

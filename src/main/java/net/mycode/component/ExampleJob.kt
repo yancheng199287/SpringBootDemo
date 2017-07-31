@@ -1,7 +1,6 @@
 package net.mycode.component
 
 import net.mycode.service.RedisService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.scheduling.quartz.QuartzJobBean
 

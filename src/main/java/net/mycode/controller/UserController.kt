@@ -14,7 +14,6 @@ import net.mycode.component.AsyncTask
 import net.mycode.component.shiro.MyAuthorizationFilter
 import net.mycode.component.shiro.MyRealm
 import net.mycode.component.shiro.RedisSessionDao
-import net.mycode.service.EhcacheService
 import net.mycode.service.RedisService
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -60,8 +59,8 @@ open class UserController {
     private val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
 
 
-    @Autowired
-    lateinit var ehcacheService: EhcacheService
+  //  @Autowired
+   // lateinit var ehcacheService: EhcacheService
 
     // @Autowired
     // var jCacheCacheManager: JCacheCacheManager
@@ -202,6 +201,7 @@ open class UserController {
     }
 
 
+/*
     @RequestMapping(value = "/testcache", method = arrayOf(RequestMethod.GET))
     @ResponseBody
     fun doRequest01(): String {
@@ -215,5 +215,6 @@ open class UserController {
         println("测试echcache 缓存。。。。")
         return ehcacheService.saveUser001("周瑜").toString()
     }
+*/
 
 }
